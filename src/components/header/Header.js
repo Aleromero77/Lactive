@@ -1,7 +1,9 @@
-import React from 'react'
+import {useState} from 'react'
 import styles from "./Header.module.scss"
 import { Link } from 'react-router-dom';
-import { FaShoppingCart } from "react-icons/fa";
+import { FaShoppingCart, FaTimes } from "react-icons/fa";
+import { CgMenu } from "react-icons/cg";
+
 
 const logo= (
   <div className={styles.logo}>
@@ -18,18 +20,41 @@ const cart = (
                   <Link to="/cart">
                     Carrito
                     <FaShoppingCart size={20} />
-                    <p>0</p>
+                    <h5>0</h5>
+                    
                   </Link>
                 </span>
-)
+);
 
 const Header = () => {
+  const [showMenu, setShowMenu] = useState(false)
+
+  const toggleMenu = () => {
+     setShowMenu(!showMenu)
+  };
+
+    const hideMenu = () => {
+      setShowMenu(false)
+  };
+
     return (
         <header>
           <div className={styles.header}>
             {logo}
-            <nav>
-              <ul>
+
+            <nav className={showMenu ? `${styles["show-nav"]}`
+            : `${styles["hide-nav"]}`}>
+
+              <div className={showMenu ? `${styles["nav-wrapper"]} ${styles["show-nav-wrapper"]}` : `${styles["nav-wrapper"]}`}
+            onClick={hideMenu}
+              
+              ></div>
+
+              <ul onClick={hideMenu}>
+              <li className={styles["logo-mobile"]}>
+                {logo}
+                <FaTimes size={22} color="fff" onClick={hideMenu}/>
+              </li>
               <li>
                 <Link to="/">
                   Home
@@ -41,7 +66,7 @@ const Header = () => {
                 </Link>
               </li>
               </ul>
-              <div className={styles["header-right"]}>
+              <div className={styles["header-right"]} onClick={hideMenu}>
                 <span className={styles.links}> 
                   <Link to="/login">Inicia Sesión</Link>
                   <Link to="/register">Regístrate</Link>
@@ -50,6 +75,13 @@ const Header = () => {
                 {cart}
             </div>
           </nav>
+
+           <div className={styles["menu-icon"]}>
+            {cart}
+            <CgMenu size={28} onClick={toggleMenu} />
+          </div>
+
+          
         </div>
       </header>
       );
